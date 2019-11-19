@@ -21,15 +21,11 @@ find_package(catkin REQUIRED
     tf
 )
 
-# Enable OPENCV in darknet
-add_definitions(-DOPENCV)
-add_definitions(-O4 -g)
+
 
 catkin_package(
   INCLUDE_DIRS
     include
-  LIBRARIES
-    ${PROJECT_NAME}_lib
   CATKIN_DEPENDS
     cv_bridge
     roscpp
@@ -43,8 +39,6 @@ catkin_package(
 )
 
 include_directories(
-  ${DARKNET_PATH}/src
-  ${DARKNET_PATH}/include
   include
   ${Boost_INCLUDE_DIRS}
   ${catkin_INCLUDE_DIRS}

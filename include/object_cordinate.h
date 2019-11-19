@@ -3,8 +3,8 @@
 #include <std_msgs/String.h>
 #include <sstream>
 #include <string>
-#include <BoundingBoxes.h>
-#include <BoundingBox.h>
+#include <darknet_ros_msgs/BoundingBoxes.h>
+#include <darknet_ros_msgs/BoundingBox.h>
 #include <geometry_msgs/Twist.h>
 #include <image_transport/image_transport.h>
 #include <sensor_msgs/CameraInfo.h>

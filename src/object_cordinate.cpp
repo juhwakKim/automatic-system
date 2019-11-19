@@ -75,7 +75,7 @@ void obj_cor::depth_callback(const sensor_msgs::CameraInfo::ConstPtr& mSPtrCamer
 
     // Print out the depth information
     depth_vec.clear();
-    if(x_center != 0 & y_center != 0){
+    if(x_center != 0 && y_center != 0){
       for(int i=-2; i < 3; ++i){
         for(int j=-2; j < 3; ++j){
           depth = cv_depth_ptr->image.at<short int>(cv::Point(x_center+i,y_center+j));//you can change 240,320 to your interested pixel
