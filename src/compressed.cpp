@@ -20,7 +20,7 @@ void compress::imageCallback(const sensor_msgs::ImageConstPtr& msg_)
       cvImage.header.frame_id = "detection_images";
       cvImage.encoding = sensor_msgs::image_encodings::BGR8;
       cvImage.image = detection_image;
-      ros::Rate loop_rate(30);
+      ros::Rate loop_rate(10);
       while (ros::ok()) {
         pub.publish(*cvImage.toImageMsg());
         ros::spinOnce();

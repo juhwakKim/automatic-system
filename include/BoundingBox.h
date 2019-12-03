@@ -30,7 +30,10 @@ struct BoundingBox_
     , xmax(0)
     , ymax(0)
     , id(0)
-    , Class()  {
+    , Class()
+    , x_cor(0.0)
+    , y_cor(0.0)
+    , z_cor(0.0)  {
     }
   BoundingBox_(const ContainerAllocator& _alloc)
     : probability(0.0)
@@ -39,7 +42,10 @@ struct BoundingBox_
     , xmax(0)
     , ymax(0)
     , id(0)
-    , Class(_alloc)  {
+    , Class(_alloc)
+    , x_cor(0.0)
+    , y_cor(0.0)
+    , z_cor(0.0)  {
   (void)_alloc;
     }
 
@@ -65,6 +71,15 @@ struct BoundingBox_
 
    typedef std::basic_string<char, std::char_traits<char>, typename ContainerAllocator::template rebind<char>::other >  _Class_type;
   _Class_type Class;
+
+   typedef double _x_cor_type;
+  _x_cor_type x_cor;
+
+   typedef double _y_cor_type;
+  _y_cor_type y_cor;
+
+   typedef double _z_cor_type;
+  _z_cor_type z_cor;
 
 
 
@@ -144,12 +159,12 @@ struct MD5Sum< ::darknet_ros_msgs::BoundingBox_<ContainerAllocator> >
 {
   static const char* value()
   {
-    return "6b8f03f076d75c692c40b501a56253e0";
+    return "3c25dbbcbdf1f61fc3a07d2ae4b2df0f";
   }
 
   static const char* value(const ::darknet_ros_msgs::BoundingBox_<ContainerAllocator>&) { return value(); }
-  static const uint64_t static_value1 = 0x6b8f03f076d75c69ULL;
-  static const uint64_t static_value2 = 0x2c40b501a56253e0ULL;
+  static const uint64_t static_value1 = 0x3c25dbbcbdf1f61fULL;
+  static const uint64_t static_value2 = 0xc3a07d2ae4b2df0fULL;
 };
 
 template<class ContainerAllocator>
@@ -175,6 +190,9 @@ int64 xmax\n\
 int64 ymax\n\
 int16 id\n\
 string Class\n\
+float64 x_cor\n\
+float64 y_cor\n\
+float64 z_cor\n\
 ";
   }
 
@@ -200,6 +218,9 @@ namespace serialization
       stream.next(m.ymax);
       stream.next(m.id);
       stream.next(m.Class);
+      stream.next(m.x_cor);
+      stream.next(m.y_cor);
+      stream.next(m.z_cor);
     }
 
     ROS_DECLARE_ALLINONE_SERIALIZER
@@ -232,6 +253,12 @@ struct Printer< ::darknet_ros_msgs::BoundingBox_<ContainerAllocator> >
     Printer<int16_t>::stream(s, indent + "  ", v.id);
     s << indent << "Class: ";
     Printer<std::basic_string<char, std::char_traits<char>, typename ContainerAllocator::template rebind<char>::other > >::stream(s, indent + "  ", v.Class);
+    s << indent << "x_cor: ";
+    Printer<double>::stream(s, indent + "  ", v.x_cor);
+    s << indent << "y_cor: ";
+    Printer<double>::stream(s, indent + "  ", v.y_cor);
+    s << indent << "z_cor: ";
+    Printer<double>::stream(s, indent + "  ", v.z_cor);
   }
 };
 

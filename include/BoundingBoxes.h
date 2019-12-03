@@ -127,12 +127,12 @@ struct MD5Sum< ::darknet_ros_msgs::BoundingBoxes_<ContainerAllocator> >
 {
   static const char* value()
   {
-    return "004f6f4f48a741582d10735997905846";
+    return "e1baa811123df21c8e712ea74f442d33";
   }
 
   static const char* value(const ::darknet_ros_msgs::BoundingBoxes_<ContainerAllocator>&) { return value(); }
-  static const uint64_t static_value1 = 0x004f6f4f48a74158ULL;
-  static const uint64_t static_value2 = 0x2d10735997905846ULL;
+  static const uint64_t static_value1 = 0xe1baa811123df21cULL;
+  static const uint64_t static_value2 = 0x8e712ea74f442d33ULL;
 };
 
 template<class ContainerAllocator>
@@ -182,6 +182,9 @@ int64 xmax\n\
 int64 ymax\n\
 int16 id\n\
 string Class\n\
+float64 x_cor\n\
+float64 y_cor\n\
+float64 z_cor\n\
 ";
   }
 

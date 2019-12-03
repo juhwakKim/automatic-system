@@ -34,15 +34,28 @@ void obj_cor::bb_callback(const darknet_ros_msgs::BoundingBoxes::ConstPtr& msg)
 {
     for(int i=0;i<msg->bounding_boxes.size();i++){
 
-	    if(msg->bounding_boxes[i].Class == "mouse"){
+	    if(msg->bounding_boxes[i].Class == "bottle"){
 
         xmin = msg->bounding_boxes[i].xmin;
         xmax = msg->bounding_boxes[i].xmax;
         ymin = msg->bounding_boxes[i].ymin;
         ymax = msg->bounding_boxes[i].ymax;
+        x_cor = msg->bounding_boxes[i].x_cor;
+        y_cor = msg->bounding_boxes[i].y_cor;
+        z_cor = msg->bounding_boxes[i].z_cor;
 
-        x_center = (xmin+xmax)/2;
-        y_center = (ymin+ymax)/2;
+        ROS_INFO("x: %f", x_cor);
+        ROS_INFO("y: %f", y_cor);
+        ROS_INFO("z: %f", z_cor);
+
+        static tf::TransformBroadcaster br;
+        tf::Transform transform;
+        tf::Quaternion q;
+        q.setRPY(0, 0, 0);
+        transform.setRotation(q);
+        transform.setOrigin( tf::Vector3(-x_cor*5, -z_cor*2, y_cor*5) );
+        br.sendTransform(tf::StampedTransform(transform, ros::Time::now(), "bottle", "odom"));  
+    
         detected_num += 1;
 		  }
 
@@ -62,55 +75,45 @@ void obj_cor::bb_callback(const darknet_ros_msgs::BoundingBoxes::ConstPtr& msg)
 void obj_cor::depth_callback(const sensor_msgs::CameraInfo::ConstPtr& mSPtrCameraInfo, const sensor_msgs::Image::ConstPtr& msg)
 {
   if(detected){
-    cv_bridge::CvImagePtr cv_depth_ptr;
-    try
-    {
-      cv_depth_ptr = cv_bridge::toCvCopy(msg, sensor_msgs::image_encodings::TYPE_16UC1);//now cv_ptr is the matrix, do not forget "TYPE_" before "16UC1"
-    }
-    catch (cv_bridge::Exception& e)
-    {
-      ROS_ERROR("cv_bridge exception: %s", e.what());
-      return;
-    }
+    // cv_bridge::CvImagePtr cv_depth_        ptr;
+    // try
+    // {
+    //   cv_depth_ptr = cv_bridge::toCvCopy(msg, sensor_msgs::image_encodings::TYPE_16UC1);//now cv_ptr is the matrix, do not forget "TYPE_" before "16UC1"
+    // }
+    // catch (cv_bridge::Exception& e)
+    // {
+    //   ROS_ERROR("cv_bridge exception: %s", e.what());
+    //   return;
+    // }
 
-    // Print out the depth information
-    depth_vec.clear();
-    if(x_center != 0 && y_center != 0){
-      for(int i=-2; i < 3; ++i){
-        for(int j=-2; j < 3; ++j){
-          depth = cv_depth_ptr->image.at<short int>(cv::Point(x_center+i,y_center+j));//you can change 240,320 to your interested pixel
-          depth_vec.push_back(depth);
-        }
-      }
-    }
+    // // Print out the depth information
+    // depth_vec.clear();
+    // if(x_center != 0 && y_center != 0){
+    //   for(int i=-2; i < 3; ++i){
+    //     for(int j=-2; j < 3; ++j){
+    //       depth = cv_depth_ptr->image.at<short int>(cv::Point(x_center+i,y_center+j));//you can change 240,320 to your interested pixel
+    //       depth_vec.push_back(depth);
+    //     }
+    //   }
+    // }
     
-    depths = std::accumulate( depth_vec.begin(), depth_vec.end(), 0.0f )/ depth_vec.size();
+    // depths = std::accumulate( depth_vec.begin(), depth_vec.end(), 0.0f )/ depth_vec.size();
 
-    vec.push_back(depths);
-    if(vec.size() == 50){
-      vec.erase(vec.begin());
-    }
-    else{
-      depth_mean = std::accumulate( vec.begin(), vec.end(), 0.0f )/ vec.size();
-    }
-    if(depth != 0 && depth_mean != 0){
-      depthSI = depth * 0.001f;
+    // vec.push_back(depths);
+    // if(vec.size() == 50){
+    //   vec.erase(vec.begin());
+    // }
+    // else{
+    //   depth_mean = std::accumulate( vec.begin(), vec.end(), 0.0f )/ vec.size();
+    // }
+    // if(depth != 0 && depth_mean != 0){
+    //   depthSI = depth * 0.001f;
 
-      x_cor = depthSI * (x_center - mSPtrCameraInfo->K.at(2)) / mSPtrCameraInfo->K.at(0);
-      y_cor = depthSI * (y_center - mSPtrCameraInfo->K.at(5)) / mSPtrCameraInfo->K.at(4);
+    //   x_cor = depthSI * (x_center - mSPtrCameraInfo->K.at(2)) / mSPtrCameraInfo->K.at(0);
+    //   y_cor = depthSI * (y_center - mSPtrCameraInfo->K.at(5)) / mSPtrCameraInfo->K.at(4);
 
-      }
-    ROS_INFO("x: %f", x_cor);
-    ROS_INFO("y: %f", y_cor);
-    ROS_INFO("z: %f", depthSI);
-    
-    static tf::TransformBroadcaster br;
-    tf::Transform transform;
-    tf::Quaternion q;
-    q.setRPY(0, 0, 0);
-    transform.setRotation(q);
-    transform.setOrigin( tf::Vector3(-x_cor*5, -depthSI*2, -y_cor*5) );
-    br.sendTransform(tf::StampedTransform(transform, ros::Time::now(), "mouse", "camera"));
+    //   }
+ 
 
   }
 }
@@ -121,6 +124,6 @@ int main(int argc, char **argv)
   ros::NodeHandle nh;
 
   obj_cor oc(&nh);
-  
+
   ros::spin();
 }

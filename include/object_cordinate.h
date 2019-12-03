@@ -58,6 +58,7 @@ class obj_cor
 
         float x_cor;
         float y_cor;
+        float z_cor;
         float depthSI;
 
         std::vector<int> vec;
